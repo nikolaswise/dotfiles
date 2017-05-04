@@ -1,0 +1,17 @@
+{
+  "color_scheme": "Packages/Theme - Solarized/Solarized (dark).tmTheme",
+  "font_face": "Input Mono",
+  "font_size": 23.0,
+  "font_weight": 300,
+  "ignored_packages":
+  [
+    "Vintage"
+  ],
+  "line_padding_bottom": 1,
+  "line_padding_top": 2,
+  "tab_size": 2,
+  "theme": "Solarized Dark.sublime-theme",
+  "translate_tabs_to_spaces": true,
+  "trim_trailing_white_space_on_save": true,
+  "use_simple_full_screen": true
+}
