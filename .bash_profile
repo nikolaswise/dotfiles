@@ -8,7 +8,7 @@ if [[ -n "$PS1" ]]; then
   # √ show current path ( \w )
   # √ show current git branch if applicable ( \$(parse_git_branch) )
   # √ OMG COLORS!!!
-  export PS1="\[\033[01;34m\]\w \[\033[31m\]\$(parse_git_branch)\[\033[32m\]$\[\033[0m\] "
+  export PS1="\[\033[01;34m\]\w \[\033[31m\]\$(parse_git_branch)\[\033[32m\]$\[\033[0m\] 🌵 "
 
   # add user bin path
   export PATH=$PATH:~/bin
@@ -36,20 +36,6 @@ if [[ -n "$PS1" ]]; then
   alias grep='grep --color=auto'
   alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 
-  # rails
-  alias farmdb='be rake db:drop && be rake db:create && be rake db:migrate && be rake db:seed'
-
-  # middleman
-  alias mm='bundle exec middleman'
-  alias ms='bundle exec middleman server'
-
-  # github pull request
-  alias preq='hub pull-request'
-
-  # github issues
-  alias ish='gh is --no-hooks'
-  alias trub='gh is --no-hooks -L "bug"'
-
   # git
   alias g='git'
   alias ga='git add'
@@ -57,6 +43,7 @@ if [[ -n "$PS1" ]]; then
   alias gd='git diff'
   alias gs='git status'
   alias gw='git diff --word-diff'
+  alias glog='git log --graph --decorate --pretty=oneline --abbrev-commit'
 
   # if [ -f ~/.git-completion.bash ]; then
   #   . ~/.git-completion.bash
@@ -114,10 +101,37 @@ if [[ -n "$PS1" ]]; then
    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/(\1$(parse_git_dirty)) /"
   }
 
+  # raw branch name
+  function get_current_branch {
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1 /"
+  }
+
+  # ssh to sandbox
+  alias sandbox="ssh wise@wise.smugmug.net"
+
+  # synchotron
+  # alias sync-sandbox="synchrotron --notify --exclude-from ~/.synchrotron-ignore wise@wise.smugmug.net:sandboxes/$(get_current_branch) ."
+  alias get_current_branch="$(get_current_branch)"
+  alias sync-sandbox='synchrotron --notify --exclude-from ~/.synchrotron-ignore wise@wise.smugmug.net:sandboxes/$(git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1 /") .'
+
 fi
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
+# Synchrotron aliases.
+for i in {1..10}; do
+    alias sync-sandbox-$i="synchrotron --notify --exclude-from ~/.synchrotron-ignore wise@wise.smugmug.net:/home/wise/sandboxes/wise-$i/ ~/Projects/SmugMug/"
+done
+
+alias sync-media="synchrotron --notify --exclude-from ~/.synchrotron-ignore wise@wise.smugmug.net:/home/wise/repos/Media/ ~/Projects/Media/"
+
 export GOPATH=~/go
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:/Applications/Argyll_V1.8.3/bin
+
+export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+
+
+
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="/usr/local/opt/php@8.0/bin:$PATH"
